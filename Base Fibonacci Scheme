@@ -1,0 +1,77 @@
+    from qiskit import QuantumCircuit
+
+    def recursive_cnot_gate(qc, qubits, depth, max_depth, bell_gate):
+  
+    if depth > max_depth:
+        return
+
+    # Apply the Bell pair encoding gadget (my_gate) to the provided qubits
+    qc.append(bell_gate, qubits[4:12])  # First 8 qubits
+    qc.append(bell_gate, qubits[16:24])  # Next 8 qubits
+
+    # Apply CNOT gates between the qubits as per your pattern
+    for i in range(4):
+        qc.cx(qubits[i], qubits[i+4])  # Between the first 4 and the next 4 qubits
+        qc.cx(qubits[i+12], qubits[i+16])  # Between the second set of 4 and the next 4
+
+    qc.barrier()
+
+    # Apply Hadamard and Z gates as per your pattern
+    for i in range(4):
+        qc.h(qubits[i])
+        qc.h(qubits[i+12])
+        qc.z(qubits[i+4])
+        qc.z(qubits[i+16])
+
+    qc.barrier()
+    for i in range(4):
+      qc.cx(qubits[i+8], qubits[i+20])
+    
+
+    # Apply measurements (for illustrative purposes, measuring all qubits here)
+    for i in range(16):
+        qc.measure(qubits[i], 0)
+
+    qc.barrier()
+    qc.append(bell_gate, qubits[12:20])  # First 8 qubits
+    qc.append(bell_gate, qubits[24:32])  # Next 8 qubits
+
+    # Apply CNOT gates between the qubits as per your pattern
+    for i in range(4):
+        qc.cx(qubits[i+8], qubits[i+12])  # Between the first 4 and the next 4 qubits
+        qc.cx(qubits[i+24], qubits[i+28])  # Between the second set of 4 and the next 4
+
+    qc.barrier()
+
+    # Apply Hadamard and Z gates as per your pattern
+    for i in range(4):
+        qc.h(qubits[i+8])
+        qc.z(qubits[i+12])
+        qc.h(qubits[i+20])
+        qc.z(qubits[i+24])
+    # Recursive call for the next depth
+    if depth < max_depth:
+        recursive_cnot_gate(qc, qubits[4:] + qubits[:4], depth+1, max_depth, bell_gate)
+
+    # Define the initial Bell pair encoding gate (my_gate)
+    qc2 = QuantumCircuit(8, name="Encoded_Bell_Pair")
+    qc2.cx(0, 1)
+    qc2.cx(2, 3)
+    qc2.cx(4, 6)
+    qc2.cx(5, 7)
+    qc2.cx(0, 4)
+    qc2.cx(1, 5)
+    qc2.cx(2, 6)
+    qc2.cx(3, 7)
+
+    my_gate = qc2.to_gate()
+
+    # Create the main quantum circuit and initialize qubits
+    qc1 = QuantumCircuit(32, 32)
+
+    # Call the recursive function starting at depth 0, with a maximum recursion depth
+    max_depth = 0  # You can change this value to control the recursion depth
+    recursive_cnot_gate(qc1, list(range(32)), 0, max_depth, my_gate)
+
+    # Now, `qc1` contains the recursively structured circuit
+    qc1.draw('mpl')

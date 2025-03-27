@@ -1,0 +1,615 @@
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile, assemble
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+from qiskit.result import marginal_distribution
+from qiskit.circuit.library import UGate
+from numpy import pi, random
+from qiskit.visualization import plot_histogram
+from qiskit import AncillaRegister
+
+qr1 = QuantumRegister(32)
+anc1 = AncillaRegister(600)
+n_qubits =  632
+qc1 = QuantumCircuit(qr1,anc1)
+
+qc2 = QuantumCircuit(8)
+qc2.cx(0, 1)
+qc2.cx(2, 3)
+qc2.cx(4, 6)
+qc2.cx(5, 7)
+qc2.cx(0, 4)
+qc2.cx(1, 5)
+qc2.cx(2, 6)
+qc2.cx(3, 7)
+
+my_gate = qc2.to_gate()
+
+qc1.append(my_gate, [4,5,6,7,8,9,10,11]) #Normal Qubits
+qc1.append(my_gate, [16,17,18,19,20,21,22,23])
+
+
+qc1.append(my_gate, [47,48,49,50,51,52,53,54]) #1st Ancilla Circuit
+qc1.append(my_gate, [35,36,37,38,39,40,41,42])
+
+qc1.append(my_gate, [63,64,65,66,67,68,69,70]) #2nd Ancilla Circuit
+qc1.append(my_gate, [75,76,77,78,79,80,81,82])
+
+qc1.append(my_gate, [91,92,93,94,95,96,97,98]) #3rd Ancilla Circuit
+qc1.append(my_gate, [103,104,105,106,107,108,109,110])
+
+qc1.append(my_gate, [119,120,121,122,123,124,125,126]) #4th Ancilla Circuit
+qc1.append(my_gate, [131,132,133,134,135,136,137,138]) 
+
+qc1.append(my_gate, [147,148,149,150,151,152,153,154]) #5th Ancilla Circuit
+qc1.append(my_gate, [159,160,161,162,163,164,165,166]) 
+
+qc1.append(my_gate, [175,176,177,178,179,180,181,182]) #6th Ancilla Circuit
+qc1.append(my_gate, [187,188,189,190,191,192,193,194]) 
+
+qc1.append(my_gate, [203,204,205,206,207,208,209,210]) #7th Ancilla Circuit
+qc1.append(my_gate, [215,216,217,218,219,220,221,222]) 
+
+qc1.append(my_gate, [231,232,233,234,235,236,237,238]) #8th Ancilla Circuit
+qc1.append(my_gate, [243,244,245,246,247,248,249,250]) 
+
+qc1.append(my_gate, [259,260,261,262,263,264,265,266]) #9th Ancilla Circuit
+qc1.append(my_gate, [271,272,273,274,275,276,277,278]) 
+
+# 10th Ancilla Circuit
+qc1.append(my_gate, [287,288,289,290,291,292,293,294])
+qc1.append(my_gate, [299,300,301,302,303,304,305,306])
+
+# 11th Ancilla Circuit
+qc1.append(my_gate, [315,316,317,318,319,320,321,322])
+qc1.append(my_gate, [327,328,329,330,331,332,333,334])
+
+# 12th Ancilla Circuit
+qc1.append(my_gate, [343,344,345,346,347,348,349,350])
+qc1.append(my_gate, [355,356,357,358,359,360,361,362])
+
+# 13th Ancilla Circuit
+qc1.append(my_gate, [371,372,373,374,375,376,377,378])
+qc1.append(my_gate, [383,384,385,386,387,388,389,390])
+
+# 14th Ancilla Circuit
+qc1.append(my_gate, [399,400,401,402,403,404,405,406])
+qc1.append(my_gate, [411,412,413,414,415,416,417,418])
+
+# 15th Ancilla Circuit
+qc1.append(my_gate, [427,428,429,430,431,432,433,434])
+qc1.append(my_gate, [439,440,441,442,443,444,445,446])
+
+# 16th Ancilla Circuit
+qc1.append(my_gate, [455,456,457,458,459,460,461,462])
+qc1.append(my_gate, [467,468,469,470,471,472,473,474])
+
+# 17th Ancilla Circuit
+qc1.append(my_gate, [483,484,485,486,487,488,489,490])
+qc1.append(my_gate, [495,496,497,498,499,500,501,502])
+
+# 18th Ancilla Circuit
+qc1.append(my_gate, [511,512,513,514,515,516,517,518])
+qc1.append(my_gate, [523,524,525,526,527,528,529,530])
+
+# 19th Ancilla Circuit
+qc1.append(my_gate, [539,540,541,542,543,544,545,546])
+qc1.append(my_gate, [551,552,553,554,555,556,557,558])
+
+# 20th Ancilla Circuit
+qc1.append(my_gate, [567,568,569,570,571,572,573,574])
+qc1.append(my_gate, [579,580,581,582,583,584,585,586])
+qc1.barrier()
+
+qc1.cx(qr1[0],qr1[4])
+qc1.cx(qr1[4],anc1[3])
+qc1.cx(qr1[1],qr1[5])
+qc1.cx(qr1[5], anc1[31])
+qc1.cx(qr1[2], qr1[6])
+qc1.cx(qr1[6], anc1[59])
+qc1.cx(qr1[3], qr1[7])
+qc1.cx(qr1[7], anc1[87])
+qc1.cx(qr1[12], qr1[16])
+qc1.cx(qr1[16],anc1[115])
+qc1.cx(qr1[13], qr1[17])
+qc1.cx(qr1[17], anc1[143])
+qc1.cx(qr1[14], qr1[18])
+qc1.cx(qr1[18], anc1[171])
+qc1.cx(qr1[15], qr1[19])
+qc1.cx(qr1[19], anc1[199])
+
+
+qc1.barrier()
+
+qc1.cx(qr1[8], qr1[20])
+qc1.cx(qr1[20], anc1[227])
+qc1.cx(qr1[9], qr1[21])
+qc1.cx(qr1[21], anc1[255])
+qc1.cx(qr1[10], qr1[22])
+qc1.cx(qr1[22], anc1[283])
+qc1.cx(qr1[11], qr1[23])
+qc1.cx(qr1[23],anc1[311])
+
+
+qc1.barrier()
+
+qc1.cx(anc1 [0], anc1 [4]) #1st Ancilla set 3
+qc1.cx(anc1 [1], anc1 [5])
+qc1.cx(anc1 [2], anc1 [6])
+
+qc1.cx(anc1 [11], anc1 [15]) #1st Ancilla set 4 
+qc1.cx(anc1 [12], anc1 [16])
+qc1.cx(anc1 [13], anc1 [17])
+qc1.cx(anc1 [14], anc1 [18])
+
+qc1.cx(anc1 [28], anc1 [32]) #2nd Ancilla set 3
+qc1.cx(anc1 [29], anc1 [33])
+qc1.cx(anc1 [30], anc1 [34])
+
+
+
+qc1.cx(anc1 [39], anc1 [43]) #2nd Ancilla set 4
+qc1.cx(anc1 [40], anc1 [44])
+qc1.cx(anc1 [41], anc1 [45])
+qc1.cx(anc1 [42], anc1 [46])
+
+
+qc1.cx(anc1 [56], anc1 [60]) #3rd Ancilla set 3
+qc1.cx(anc1 [57], anc1 [61])
+qc1.cx(anc1 [58], anc1 [62])
+
+qc1.cx(anc1 [67], anc1 [71]) #3rd Ancilla set 4
+qc1.cx(anc1 [68], anc1 [72])
+qc1.cx(anc1 [69], anc1 [73])
+qc1.cx(anc1 [70], anc1 [74])
+
+qc1.cx(anc1 [84], anc1 [88]) #4th Ancilla set 3
+qc1.cx(anc1 [85], anc1 [89])
+qc1.cx(anc1 [86], anc1 [90])
+
+qc1.cx(anc1 [95], anc1 [99]) #4th Ancilla set 4
+qc1.cx(anc1 [96], anc1 [100])
+qc1.cx(anc1 [97], anc1 [101])
+qc1.cx(anc1 [98], anc1 [102])
+
+qc1.cx(anc1 [112], anc1 [116]) #5th Ancilla set 3
+qc1.cx(anc1 [113], anc1 [117])
+qc1.cx(anc1 [114], anc1 [118])
+
+qc1.cx(anc1 [123], anc1 [127]) #5th Ancilla set 4
+qc1.cx(anc1 [124], anc1 [128])
+qc1.cx(anc1 [125], anc1 [129])
+qc1.cx(anc1 [126], anc1 [130])
+
+qc1.cx(anc1 [140], anc1 [144]) #6th Ancilla set 3
+qc1.cx(anc1 [141], anc1 [145])
+qc1.cx(anc1 [142], anc1 [146])
+
+qc1.cx(anc1 [151], anc1 [155]) #6th Ancilla set 4
+qc1.cx(anc1 [152], anc1 [156])
+qc1.cx(anc1 [153], anc1 [157])
+qc1.cx(anc1 [154], anc1 [158])
+
+qc1.cx(anc1 [168], anc1 [172]) #7th Ancilla set 3
+qc1.cx(anc1 [169], anc1 [173])
+qc1.cx(anc1 [170], anc1 [174])
+
+qc1.cx(anc1 [179], anc1 [183]) #7th Ancilla set 4
+qc1.cx(anc1 [180], anc1 [184])
+qc1.cx(anc1 [181], anc1 [185])
+qc1.cx(anc1 [182], anc1 [186])
+
+qc1.cx(anc1 [196], anc1 [200]) #8th Ancilla set 3
+qc1.cx(anc1 [197], anc1 [201])
+qc1.cx(anc1 [198], anc1 [202])
+
+qc1.cx(anc1 [207], anc1 [211]) #8th Ancilla set 4
+qc1.cx(anc1 [208], anc1 [212])
+qc1.cx(anc1 [209], anc1 [213])
+qc1.cx(anc1 [210], anc1 [214])
+
+# 9th Ancilla set 3
+qc1.cx(anc1 [224], anc1 [228])
+qc1.cx(anc1 [225], anc1 [229])
+qc1.cx(anc1 [226], anc1 [230])
+
+# 9th Ancilla set 4
+qc1.cx(anc1 [235], anc1 [239])
+qc1.cx(anc1 [236], anc1 [240])
+qc1.cx(anc1 [237], anc1 [241])
+qc1.cx(anc1 [238], anc1 [242])
+
+
+# 10th Ancilla set 3
+qc1.cx(anc1 [252], anc1 [256])
+qc1.cx(anc1 [253], anc1 [257])
+qc1.cx(anc1 [254], anc1 [258])
+
+# 10th Ancilla set 4
+qc1.cx(anc1 [263], anc1 [267])
+qc1.cx(anc1 [264], anc1 [268])
+qc1.cx(anc1 [265], anc1 [269])
+qc1.cx(anc1 [266], anc1 [270])
+
+
+# 11th Ancilla set 3
+qc1.cx(anc1 [280], anc1 [284])
+qc1.cx(anc1 [281], anc1 [285])
+qc1.cx(anc1 [282], anc1 [286])
+
+# 11th Ancilla set 4
+qc1.cx(anc1 [291], anc1 [295])
+qc1.cx(anc1 [292], anc1 [296])
+qc1.cx(anc1 [293], anc1 [297])
+qc1.cx(anc1 [294], anc1 [298])
+
+
+# 12th Ancilla set 3
+qc1.cx(anc1 [308], anc1 [312])
+qc1.cx(anc1 [309], anc1 [313])
+qc1.cx(anc1 [310], anc1 [314])
+
+# 12th Ancilla set 4
+qc1.cx(anc1 [319], anc1 [323])
+qc1.cx(anc1 [320], anc1 [324])
+qc1.cx(anc1 [321], anc1 [325])
+qc1.cx(anc1 [322], anc1 [326])
+
+
+# 13th Ancilla set 3
+qc1.cx(anc1 [336], anc1 [340])
+qc1.cx(anc1 [337], anc1 [341])
+qc1.cx(anc1 [338], anc1 [342])
+
+# 13th Ancilla set 4
+qc1.cx(anc1 [347], anc1 [351])
+qc1.cx(anc1 [348], anc1 [352])
+qc1.cx(anc1 [349], anc1 [353])
+qc1.cx(anc1 [350], anc1 [354])
+
+
+# 14th Ancilla set 3
+qc1.cx(anc1 [364], anc1 [368])
+qc1.cx(anc1 [365], anc1 [369])
+qc1.cx(anc1 [366], anc1 [370])
+
+# 14th Ancilla set 4
+qc1.cx(anc1 [375], anc1 [379])
+qc1.cx(anc1 [376], anc1 [380])
+qc1.cx(anc1 [377], anc1 [381])
+qc1.cx(anc1 [378], anc1 [382])
+
+
+# 15th Ancilla set 3
+qc1.cx(anc1 [392], anc1 [396])
+qc1.cx(anc1 [393], anc1 [397])
+qc1.cx(anc1 [394], anc1 [398])
+
+# 15th Ancilla set 4
+qc1.cx(anc1 [403], anc1 [407])
+qc1.cx(anc1 [404], anc1 [408])
+qc1.cx(anc1 [405], anc1 [409])
+qc1.cx(anc1 [406], anc1 [410])
+
+
+# 16th Ancilla set 3
+qc1.cx(anc1 [420], anc1 [424])
+qc1.cx(anc1 [421], anc1 [425])
+qc1.cx(anc1 [422], anc1 [426])
+
+# 16th Ancilla set 4
+qc1.cx(anc1 [431], anc1 [435])
+qc1.cx(anc1 [432], anc1 [436])
+qc1.cx(anc1 [433], anc1 [437])
+qc1.cx(anc1 [434], anc1 [438])
+
+
+# 17th Ancilla set 3
+qc1.cx(anc1 [448], anc1 [452])
+qc1.cx(anc1 [449], anc1 [453])
+qc1.cx(anc1 [450], anc1 [454])
+
+# 17th Ancilla set 4
+qc1.cx(anc1 [459], anc1 [463])
+qc1.cx(anc1 [460], anc1 [464])
+qc1.cx(anc1 [461], anc1 [465])
+qc1.cx(anc1 [462], anc1 [466])
+
+
+# 18th Ancilla set 3
+qc1.cx(anc1 [476], anc1 [480])
+qc1.cx(anc1 [477], anc1 [481])
+qc1.cx(anc1 [478], anc1 [482])
+
+# 18th Ancilla set 4
+qc1.cx(anc1 [487], anc1 [491])
+qc1.cx(anc1 [488], anc1 [492])
+qc1.cx(anc1 [489], anc1 [493])
+qc1.cx(anc1 [490], anc1 [494])
+
+
+# 19th Ancilla set 3
+qc1.cx(anc1 [504], anc1 [508])
+qc1.cx(anc1 [505], anc1 [509])
+qc1.cx(anc1 [506], anc1 [510])
+
+# 19th Ancilla set 4
+qc1.cx(anc1 [515], anc1 [519])
+qc1.cx(anc1 [516], anc1 [520])
+qc1.cx(anc1 [517], anc1 [521])
+qc1.cx(anc1 [518], anc1 [522])
+
+
+# 20th Ancilla set 3
+qc1.cx(anc1 [532], anc1 [536])
+qc1.cx(anc1 [533], anc1 [537])
+qc1.cx(anc1 [534], anc1 [538])
+
+# 20th Ancilla set 4
+qc1.cx(anc1 [547], anc1 [551])
+qc1.cx(anc1 [548], anc1 [552])
+qc1.cx(anc1 [549], anc1 [553])
+qc1.cx(anc1 [550], anc1 [554])
+
+qc1.barrier()
+
+qc1.cx(anc1 [7], anc1 [19])
+qc1.cx(anc1 [8], anc1 [20])
+qc1.cx(anc1 [9], anc1 [21]) #The long CNOT gates on the 1st CNOT gadget 
+qc1.cx(anc1 [10], anc1 [22])
+
+
+qc1.cx(anc1 [35], anc1 [47]) #The long CNOT gates on the 2st CNOT gadget 
+qc1.cx(anc1 [36], anc1 [48])
+qc1.cx(anc1 [37], anc1 [49])
+qc1.cx(anc1 [38], anc1 [50])
+
+qc1.cx(anc1 [63], anc1 [75]) #The long CNOT gates on the 3st CNOT gadget 
+qc1.cx(anc1 [64], anc1 [76])
+qc1.cx(anc1 [65], anc1 [77])
+qc1.cx(anc1 [66], anc1 [78])
+
+qc1.cx(anc1 [91], anc1 [103]) #The long CNOT gates on the 4th CNOT gadget 
+qc1.cx(anc1 [92], anc1 [104])
+qc1.cx(anc1 [93], anc1 [105])
+qc1.cx(anc1 [94], anc1 [106])
+
+qc1.cx(anc1 [119], anc1 [131]) #The long CNOT gates on the 5th CNOT gadget 
+qc1.cx(anc1 [120], anc1 [132])
+qc1.cx(anc1 [121], anc1 [133])
+qc1.cx(anc1 [122], anc1 [134])
+
+qc1.cx(anc1 [147], anc1 [159]) #The long CNOT gates on the 6th CNOT gadget 
+qc1.cx(anc1 [148], anc1 [160])
+qc1.cx(anc1 [149], anc1 [161])
+qc1.cx(anc1 [150], anc1 [162])
+
+qc1.cx(anc1 [175], anc1 [187]) #The long CNOT gates on the 7th CNOT gadget 
+qc1.cx(anc1 [176], anc1 [188])
+qc1.cx(anc1 [177], anc1 [189])
+qc1.cx(anc1 [178], anc1 [190])
+
+qc1.cx(anc1 [203], anc1 [215]) #The long CNOT gates on the 8th CNOT gadget 
+qc1.cx(anc1 [204], anc1 [216])
+qc1.cx(anc1 [205], anc1 [217])
+qc1.cx(anc1 [206], anc1 [218])
+
+# 9th CNOT gadget
+qc1.cx(anc1 [231], anc1 [243]) 
+qc1.cx(anc1 [232], anc1 [244])
+qc1.cx(anc1 [233], anc1 [245])
+qc1.cx(anc1 [234], anc1 [246])
+
+# 10th CNOT gadget
+qc1.cx(anc1 [259], anc1 [271])
+qc1.cx(anc1 [260], anc1 [272])
+qc1.cx(anc1 [261], anc1 [273])
+qc1.cx(anc1 [262], anc1 [274])
+
+# 11th CNOT gadget
+qc1.cx(anc1 [287], anc1 [299])
+qc1.cx(anc1 [288], anc1 [300])
+qc1.cx(anc1 [289], anc1 [301])
+qc1.cx(anc1 [290], anc1 [302])
+
+# 12th CNOT gadget
+qc1.cx(anc1 [315], anc1 [327])
+qc1.cx(anc1 [316], anc1 [328])
+qc1.cx(anc1 [317], anc1 [329])
+qc1.cx(anc1 [318], anc1 [330])
+
+# 13th CNOT gadget
+qc1.cx(anc1 [343], anc1 [355])
+qc1.cx(anc1 [344], anc1 [356])
+qc1.cx(anc1 [345], anc1 [357])
+qc1.cx(anc1 [346], anc1 [358])
+
+# 14th CNOT gadget
+qc1.cx(anc1 [371], anc1 [383])
+qc1.cx(anc1 [372], anc1 [384])
+qc1.cx(anc1 [373], anc1 [385])
+qc1.cx(anc1 [374], anc1 [386])
+
+# 15th CNOT gadget
+qc1.cx(anc1 [399], anc1 [411])
+qc1.cx(anc1 [400], anc1 [412])
+qc1.cx(anc1 [401], anc1 [413])
+qc1.cx(anc1 [402], anc1 [414])
+
+# 16th CNOT gadget
+qc1.cx(anc1 [427], anc1 [439])
+qc1.cx(anc1 [428], anc1 [440])
+qc1.cx(anc1 [429], anc1 [441])
+qc1.cx(anc1 [430], anc1 [442])
+
+# 17th CNOT gadget
+qc1.cx(anc1 [455], anc1 [467])
+qc1.cx(anc1 [456], anc1 [468])
+qc1.cx(anc1 [457], anc1 [469])
+qc1.cx(anc1 [458], anc1 [470])
+
+# 18th CNOT gadget
+qc1.cx(anc1 [483], anc1 [495])
+qc1.cx(anc1 [484], anc1 [496])
+qc1.cx(anc1 [485], anc1 [497])
+qc1.cx(anc1 [486], anc1 [498])
+
+# 19th CNOT gadget
+qc1.cx(anc1 [511], anc1 [523])
+qc1.cx(anc1 [512], anc1 [524])
+qc1.cx(anc1 [513], anc1 [525])
+qc1.cx(anc1 [514], anc1 [526])
+
+# 20th CNOT gadget
+qc1.cx(anc1 [539], anc1 [551])
+qc1.cx(anc1 [540], anc1 [552])
+qc1.cx(anc1 [541], anc1 [553])
+qc1.cx(anc1 [542], anc1 [554])
+
+
+qc1.barrier()
+# 1st qubit
+qc1.append(my_gate, [40, 41, 42, 43, 44, 45, 46, 47])
+qc1.append(my_gate, [52, 53, 54, 55, 56, 57, 58, 59])
+
+# 2nd qubit
+qc1.append(my_gate, [68, 69, 70, 71, 72, 73, 74, 75])
+qc1.append(my_gate, [80, 81, 82, 83, 84, 85, 86, 87])  # 2nd qubit
+
+# 3rd qubit
+qc1.append(my_gate, [96, 97, 98, 99, 100, 101, 102, 103])
+qc1.append(my_gate, [108, 109, 110, 111, 112, 113, 114, 115])  # 3rd qubit
+
+# 4th qubit
+qc1.append(my_gate, [124, 125, 126, 127, 128, 129, 130, 131])
+qc1.append(my_gate, [136, 137, 138, 139, 140, 141, 142, 143])  # 4th qubit
+
+# 5th qubit
+qc1.append(my_gate, [152, 153, 154, 155, 156, 157, 158, 159])
+qc1.append(my_gate, [164, 165, 166, 167, 168, 169, 170, 171])  # 5th qubit
+
+# 6th qubit
+qc1.append(my_gate, [180, 181, 182, 183, 184, 185, 186, 187])
+qc1.append(my_gate, [192, 193, 194, 195, 196, 197, 198, 199])  # 6th qubit
+
+# 7th qubit
+qc1.append(my_gate, [208, 209, 210, 211, 212, 213, 214, 215])
+qc1.append(my_gate, [220, 221, 222, 223, 224, 225, 226, 227])  # 7th qubit
+
+# 8th qubit
+qc1.append(my_gate, [236, 237, 238, 239, 240, 241, 242, 243])
+qc1.append(my_gate, [248, 249, 250, 251, 252, 253, 254, 255])  # 8th qubit
+
+# 9th qubit
+qc1.append(my_gate, [264, 265, 266, 267, 268, 269, 270, 271])
+qc1.append(my_gate, [276, 277, 278, 279, 280, 281, 282, 283]) # 9th qubit
+
+# 10th qubit
+qc1.append(my_gate, [292, 293, 294, 295, 296, 297, 298, 299])
+qc1.append(my_gate, [304, 305, 306, 307, 308, 309, 310, 311]) # 10th qubit
+
+# 11th qubit
+qc1.append(my_gate, [320, 321, 322, 323, 324, 325, 326, 327])
+qc1.append(my_gate, [332, 333, 334, 335, 336, 337, 338, 339]) # 11th qubit
+# 12th qubit
+qc1.append(my_gate, [348, 349, 350, 351, 352, 353, 354, 355])
+qc1.append(my_gate, [360, 361, 362, 363, 364, 365, 366, 367]) # 12th qubit
+
+# 13th qubit
+qc1.append(my_gate, [376, 377, 378, 379, 380, 381, 382, 383])
+qc1.append(my_gate, [388, 389, 390, 391, 392, 393, 394, 395]) # 13th qubit
+
+# 14th qubit
+qc1.append(my_gate, [404, 405, 406, 407, 408, 409, 410, 411])
+qc1.append(my_gate, [416, 417, 418, 419, 420, 421, 422, 423]) # 14th qubit
+
+# 15th qubit
+qc1.append(my_gate, [432, 433, 434, 435, 436, 437, 438, 439])
+qc1.append(my_gate, [444, 445, 446, 447, 448, 449, 450, 451]) # 15th qubit
+
+# 16th qubit
+qc1.append(my_gate, [460, 461, 462, 463, 464, 465, 466, 467])
+qc1.append(my_gate, [472, 473, 474, 475, 476, 477, 478, 479]) # 16th qubit
+
+# 17th qubit
+qc1.append(my_gate, [488, 489, 490, 491, 492, 493, 494, 495])
+qc1.append(my_gate, [500, 501, 502, 503, 504, 505, 506, 507]) # 17th qubit
+
+# 18th qubit
+qc1.append(my_gate, [516, 517, 518, 519, 520, 521, 522, 523])
+qc1.append(my_gate, [528, 529, 530, 531, 532, 533, 534, 535]) # 18th qubit
+
+# 19th qubit
+qc1.append(my_gate, [544, 545, 546, 547, 548, 549, 550, 551])
+qc1.append(my_gate, [556, 557, 558, 559, 560, 561, 562, 563]) # 19th qubit
+
+# 20th qubit
+qc1.append(my_gate, [572, 573, 574, 575, 576, 577, 578, 579])
+qc1.append(my_gate, [584, 585, 586, 587, 588, 589, 590, 591]) # 20th qubit
+
+
+
+qc1.barrier()
+qc1.cx(anc1 [4], anc1 [8])
+qc1.cx(anc1 [5], anc1 [9]) #1st Ancilla set 4 second last
+qc1.cx(anc1 [6], anc1 [10])
+qc1.cx(anc1 [7], anc1 [11])
+
+qc1.cx(anc1 [20], anc1 [24])
+qc1.cx(anc1 [21], anc1 [25]) #1st Ancilla set 4 last
+qc1.cx(anc1 [22], anc1 [26])
+qc1.cx(anc1 [23], anc1 [27])
+
+qc1.cx(anc1 [48], anc1 [52])
+qc1.cx(anc1 [49], anc1 [53]) #2st Ancilla set 4 last
+qc1.cx(anc1 [50], anc1 [54])
+qc1.cx(anc1 [51], anc1 [55])
+
+qc1.cx(anc1 [32], anc1 [36])
+qc1.cx(anc1 [33], anc1 [37]) #2st Ancilla set 4 second last
+qc1.cx(anc1 [34], anc1 [38])
+qc1.cx(anc1 [35], anc1 [39])
+
+
+
+qc1.cx(anc1 [60], anc1 [64])
+qc1.cx(anc1 [61], anc1 [65]) #3rd Ancilla set 4 second last
+qc1.cx(anc1 [62], anc1 [66])
+qc1.cx(anc1 [63], anc1 [67])
+
+qc1.cx(anc1 [76], anc1 [80])
+qc1.cx(anc1 [77], anc1 [81]) #3rd Ancilla set 4 last
+qc1.cx(anc1 [78], anc1 [82])
+qc1.cx(anc1 [79], anc1 [83])
+
+qc1.cx(anc1 [116], anc1 [120])
+qc1.cx(anc1 [117], anc1 [121]) #4th Ancilla set 4 second last
+qc1.cx(anc1 [118], anc1 [122])
+qc1.cx(anc1 [119], anc1 [123])
+
+qc1.cx(anc1 [132], anc1 [136])
+qc1.cx(anc1 [133], anc1 [137]) #4th Ancilla set 4 last
+qc1.cx(anc1 [134], anc1 [138])
+qc1.cx(anc1 [135], anc1 [139])
+
+qc1.append(my_gate, [12,13,14,15,16,17,18,19])
+qc1.append(my_gate, [24,25,26,27,28,29,30,31])
+qc1.cx(qr1[8], qr1[12])
+qc1.cx(qr1[12], anc1[339])
+qc1.cx(qr1[9], qr1[13])
+qc1.cx(qr1[13], anc1[367])
+qc1.cx(qr1[10], qr1[14])
+qc1.cx(qr1[14], anc1[395])
+qc1.cx(qr1[11], qr1[15])
+qc1.cx(qr1[15], anc1[423])
+
+qc1.cx(qr1[24], qr1[28])
+qc1.cx(qr1[28], anc1[451])
+qc1.cx(qr1[25], qr1[29])
+qc1.cx(qr1[29], anc1[479])
+qc1.cx(qr1[26], qr1[30])
+qc1.cx(qr1[30], anc1[507])
+qc1.cx(qr1[27], qr1[31])
+qc1.cx(qr1[31], anc1[535])
+
+qc1.measure_all()
